@@ -1,103 +1,100 @@
-# 📚 Smart Attendance System
+# Smart Attendance System
 
-A full-stack web application to manage student attendance efficiently.
+Full-stack attendance app built with React, Node.js, Express, MongoDB, and Mongoose.
 
----
+## Project Structure
 
-## 🚀 Tech Stack
-
-* **Frontend:** React.js
-* **Backend:** Node.js + Express.js
-* **Database:** MongoDB
-* **API Testing:** Postman
-
----
-
-## ✨ Features
-
-* 👤 Add new students
-* 📋 View student list
-* ✅ Mark attendance (Present)
-* 📅 Track attendance by date
-* 🔍 Filter attendance records
-* 🚫 Prevent duplicate attendance per day
-
----
-
-## 🖥️ Screenshots
-
-> *(Add screenshots later for better presentation)*
-
----
-
-## ⚙️ Installation & Setup
-
-### 🔹 Clone Repository
-
-```bash
-git clone https://github.com/Meraz210/Attendance-system.git
-cd Attendance-system
+```text
+attendance-system/
+  backend/
+    models/
+      Attendance.js
+      Student.js
+      User.js
+    server.js
+    package.json
+  frontend/
+    public/
+    src/
+      App.css
+      App.js
+    package.json
 ```
 
----
+## Backend API
 
-### 🔹 Backend Setup
+Base URL: `http://localhost:5000`
 
-```bash
-npm install
-node server.js
-```
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `POST` | `/auth/register` | Create an admin or student user account |
+| `POST` | `/auth/login` | Login and receive a JWT token |
+| `GET` | `/auth/me` | Get current logged-in user |
+| `POST` | `/add-student` | Add a student with `name`, `email`, and `studentId` |
+| `GET` | `/students` | Get all students |
+| `POST` | `/mark-attendance` | Mark a student present for today |
+| `GET` | `/attendance` | Get all attendance records |
+| `GET` | `/attendance/:studentId` | Get attendance records for one student |
+| `GET` | `/attendance-by-date?date=YYYY-MM-DD` | Get attendance records by date |
 
-👉 Runs on: `http://localhost:5000`
+## How To Run
 
----
+1. Start MongoDB locally.
 
-### 🔹 Frontend Setup
+   The backend defaults to:
 
-```bash
-cd frontend
-npm install
-npm start
-```
+   ```text
+   mongodb://127.0.0.1:27017/attendanceDB
+   ```
 
-👉 Runs on: `http://localhost:3000`
+   To use a different MongoDB URI, create `backend/.env`:
 
----
+   ```text
+   MONGO_URI=mongodb://127.0.0.1:27017/attendanceDB
+   PORT=5000
+   JWT_SECRET=replace-with-a-long-random-secret
+   ```
 
-## 📡 API Endpoints
+2. Start the backend.
 
-### 👤 Student
+   ```bash
+   cd backend
+   npm install
+   npm start
+   ```
 
-* `POST /add-student` → Add student
-* `GET /students` → Get all students
+3. Start the frontend in a second terminal.
 
----
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
 
-### 📅 Attendance
+4. Open the app.
 
-* `POST /mark-attendance` → Mark attendance
-* `GET /attendance` → Get all attendance
-* `GET /attendance/:studentId` → Get by student
-* `GET /attendance-by-date?date=YYYY-MM-DD` → Filter by date
+   ```text
+   http://localhost:3000
+   ```
 
----
+## Login Flow
 
-## 🧠 Future Improvements
+1. Register an admin account from the app.
+2. Login as admin.
+3. Add student profiles from the Admin Panel.
+4. Register a student/user account using the same `studentId` that admin created.
+5. Login as student/user to mark attendance.
 
-* 🔐 Authentication (Login/Signup)
-* 📊 Dashboard with charts
-* 📄 Export attendance (CSV/PDF)
-* 🎨 Improved UI/UX
+Admin users can manage students and view/export reports. Student users can only view and mark attendance for their own `studentId`.
 
----
+## Attendance Behavior
 
-## 👨‍💻 Author
+Attendance is stored with:
 
-**Meraz**
-Aspiring Full Stack Developer 🚀
+- `studentId`
+- `date` in `YYYY-MM-DD` format
+- `time` in `HH:mm:ss` format
+- `status` set to `Present`
+- `markedAt` as a full JavaScript date
 
----
-
-## ⭐ Show Your Support
-
-If you like this project, give it a ⭐ on GitHub!
+The database has a unique compound index on `studentId + date`, so a student can only be marked present once per day.

@@ -10,12 +10,14 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    lowercase: true
+    lowercase: true,
+    trim: true
   },
   studentId: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    trim: true
   }
 }, {
   timestamps: true
